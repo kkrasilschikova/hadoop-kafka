@@ -1,0 +1,6 @@
+package kafka
+
+class GetEvents {
+
+
+}

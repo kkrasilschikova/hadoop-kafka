@@ -4,13 +4,15 @@ import cakesolutions.kafka.KafkaConsumer
 import cakesolutions.kafka.KafkaConsumer.Conf
 import org.apache.kafka.clients.consumer.{ConsumerRecords, OffsetResetStrategy}
 import org.apache.kafka.common.serialization.StringDeserializer
+import play.api.libs.json.JsValue
+
 import scala.collection.JavaConversions._
 
 class Consumer(bootstrapServers: String) {
 
   val consumer = KafkaConsumer(
-    Conf(new StringDeserializer(),
-      new StringDeserializer(),
+    Conf(new StringDeserializer,
+      new JsonDeserializer,
       bootstrapServers = bootstrapServers,
       groupId = "group",
       enableAutoCommit = true,
@@ -21,10 +23,18 @@ class Consumer(bootstrapServers: String) {
     )
   )
 
-  def consumerResults(topic: String) = {
+  def getKafkaEvents(ofType: String, topic: String, kafkaHost: String): Seq[JsValue] = {
     consumer.subscribe(Seq(topic))
-    val records: ConsumerRecords[String, String] = consumer.poll(100)
-    for (record <- records) println(record)
+    val records: ConsumerRecords[String, JsValue]=consumer.poll(1000)
+
+    def loop(records: ConsumerRecords[String, JsValue], acc: Seq[JsValue]): Seq[JsValue]={
+      val result=for (record <- records) yield (record.value() \ s"$ofType").asOpt[String] match{
+        case Some(string)=>acc:+record.value()
+        case None=>acc
+      }
+      result.flatten.toSeq
+    }
+    loop(records, Seq.empty[JsValue])
   }
 
 }

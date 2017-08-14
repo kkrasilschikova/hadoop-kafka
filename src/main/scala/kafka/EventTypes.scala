@@ -3,9 +3,9 @@ package kafka
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 
-trait VLogBundleEvent {
+trait VeeamLogBundleEvent {
   val state: String
-  val uri: String
+  val uri: URI
   val handler_id: HandlerID
   val size: Int
   val last_modified: DateTime
@@ -13,55 +13,55 @@ trait VLogBundleEvent {
   def formatTime: String = ISODateTimeFormat.dateTime.print(last_modified)
 
   override def equals(obj: scala.Any): Boolean = {
-    val that=obj.asInstanceOf[VLogBundleEvent]
+    val that=obj.asInstanceOf[VeeamLogBundleEvent]
     (this.uri==that.uri) && (this.last_modified==that.last_modified) && (this.size==that.size)
   }
 }
 
 case class AwaitingDownload(
                                state: String = "AwaitingDownload",
-                               uri: String,
+                               uri: URI,
                                handler_id: HandlerID,
                                size: Int,
                                last_modified: DateTime
-                             ) extends VLogBundleEvent
+                             ) extends VeeamLogBundleEvent
 
 case class BeingDownloaded(
                               state: String = "BeingDownloaded",
-                              uri: String,
+                              uri: URI,
                               handler_id: HandlerID,
                               size: Int,
                               last_modified: DateTime
-                            ) extends VLogBundleEvent
+                            ) extends VeeamLogBundleEvent
 
 case class NoLongerAvailable(
                                 state: String = "NoLongerAvailable",
-                                uri: String,
+                                uri: URI,
                                 handler_id: HandlerID,
                                 size: Int,
                                 last_modified: DateTime
-                              ) extends VLogBundleEvent
+                              ) extends VeeamLogBundleEvent
 
 case class AvailableForProcessing(
                                      state: String = "AvailableForProcessing",
-                                     uri: String,
+                                     uri: URI,
                                      handler_id: HandlerID,
                                      size: Int,
                                      last_modified: DateTime
-                                   ) extends VLogBundleEvent
+                                   ) extends VeeamLogBundleEvent
 
 case class QueuedForProcessing(
                                   state: String = "QueuedForProcessing",
-                                  uri: String,
+                                  uri: URI,
                                   handler_id: HandlerID,
                                   size: Int,
                                   last_modified: DateTime
-                                ) extends VLogBundleEvent
+                                ) extends VeeamLogBundleEvent
 
   case class ReadyForCleanup(
                               state: String = "ReadyForCleanup",
-                              uri: String,
+                              uri: URI,
                               handler_id: HandlerID,
                               size: Int,
                               last_modified: DateTime
-                            ) extends VLogBundleEvent
+                            ) extends VeeamLogBundleEvent

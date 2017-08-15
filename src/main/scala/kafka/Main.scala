@@ -4,14 +4,16 @@ import java.io.File
 
 object Main {
   def main(args: Array[String]): Unit = {
-    case class Config(topic: String = "bundle_events", kafkaIpPort: String = "192.168.1.52:9092", ofType: String = "AvailableForProcessing")
+    case class Config(topic: String = "bundle_events",
+                      kafkaIpPort: String = "",
+                      ofType: String = "AvailableForProcessing")
 
     val parser = new scopt.OptionParser[Config]("kafka") {
       opt[String]("topic").optional().valueName("<source-kafka-topic>").
         action((x, c) => c.copy(topic = x)).text("topic is optional")
-      opt[String]("kafkaIpPort").optional().valueName("<kafka_IP:9092>").
+      opt[String]("kafkaIpPort").required().valueName("<kafka_IP:9092>").
         action((x, c) => c.copy(kafkaIpPort = x)).text("kafkaIpPort is optional")
-      opt[String]("ofType").required().valueName("<kafka-event-type>").
+      opt[String]("ofType").optional().valueName("<kafka-event-type>").
         action((x, c) => c.copy(ofType = x))
     }
 

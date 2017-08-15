@@ -2,7 +2,7 @@ import sbtassembly.Plugin.AssemblyKeys._
 
 assemblySettings
 
-mainClass in assembly :=Some("kafka.main")
+mainClass in assembly :=Some("kafka.Main")
 
 name := "hadoop-kafka"
 

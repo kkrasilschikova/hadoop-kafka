@@ -5,8 +5,8 @@ import org.joda.time.format.ISODateTimeFormat
 
 trait VeeamLogBundleEvent {
   val state: String
-  val uri: URI
-  val handler_id: HandlerID
+  val uri: String
+  val handler_id: String
   val size: Int
   val last_modified: DateTime
 
@@ -20,48 +20,48 @@ trait VeeamLogBundleEvent {
 
 case class AwaitingDownload(
                                state: String = "AwaitingDownload",
-                               uri: URI,
-                               handler_id: HandlerID,
+                               uri: String,
+                               handler_id: String,
                                size: Int,
                                last_modified: DateTime
                              ) extends VeeamLogBundleEvent
 
 case class BeingDownloaded(
                               state: String = "BeingDownloaded",
-                              uri: URI,
-                              handler_id: HandlerID,
+                              uri: String,
+                              handler_id: String,
                               size: Int,
                               last_modified: DateTime
                             ) extends VeeamLogBundleEvent
 
 case class NoLongerAvailable(
                                 state: String = "NoLongerAvailable",
-                                uri: URI,
-                                handler_id: HandlerID,
+                                uri: String,
+                                handler_id: String,
                                 size: Int,
                                 last_modified: DateTime
                               ) extends VeeamLogBundleEvent
 
 case class AvailableForProcessing(
                                      state: String = "AvailableForProcessing",
-                                     uri: URI,
-                                     handler_id: HandlerID,
+                                     uri: String,
+                                     handler_id: String,
                                      size: Int,
                                      last_modified: DateTime
                                    ) extends VeeamLogBundleEvent
 
 case class QueuedForProcessing(
                                   state: String = "QueuedForProcessing",
-                                  uri: URI,
-                                  handler_id: HandlerID,
+                                  uri: String,
+                                  handler_id: String,
                                   size: Int,
                                   last_modified: DateTime
                                 ) extends VeeamLogBundleEvent
 
   case class ReadyForCleanup(
                               state: String = "ReadyForCleanup",
-                              uri: URI,
-                              handler_id: HandlerID,
+                              uri: String,
+                              handler_id: String,
                               size: Int,
                               last_modified: DateTime
                             ) extends VeeamLogBundleEvent

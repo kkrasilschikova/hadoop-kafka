@@ -16,6 +16,7 @@ libraryDependencies += "net.cakesolutions" %% "scala-kafka-client" % "0.11.0.0"
 libraryDependencies += "com.github.scopt" %% "scopt" % "3.6.0"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.0"
+libraryDependencies += "com.typesafe.play" % "play-json-joda_2.12" % "2.6.0"
 
 val defaultMergeStrategy: String => MergeStrategy = {
   case x if Assembly.isConfigFile(x) =>

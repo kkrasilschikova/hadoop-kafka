@@ -10,8 +10,8 @@ import scala.collection.JavaConversions._
 class Consumer(bootstrapServers: String) {
 
   val consumer = KafkaConsumer(
-    Conf(new StringDeserializer,
-      new AvailableForProcessingDeserializer,
+    Conf(keyDeserializer = new StringDeserializer,
+      valueDeserializer = new AvailableForProcessingDeserializer,
       bootstrapServers = bootstrapServers,
       groupId = "group",
       enableAutoCommit = true,

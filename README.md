@@ -3,6 +3,9 @@
 1) Read events from topic and return only of specified type  
 2) Download URI (using cURL), apply specified function, return what function returns and clean downloaded files
 
+#### Prerequisites:
+You may provide your own function in Main method instead of a default someFunc(f: File).
+
 #### In order to run the program
 
 - run *sbt assembly*

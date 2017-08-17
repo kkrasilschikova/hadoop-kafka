@@ -10,9 +10,6 @@ version := "1.0"
 
 scalaVersion := "2.12.3"
 
-resolvers += Resolver.bintrayRepo("cakesolutions", "maven")
-
-libraryDependencies += "net.cakesolutions" %% "scala-kafka-client" % "0.11.0.0"
 libraryDependencies += "com.github.scopt" %% "scopt" % "3.6.0"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.0"

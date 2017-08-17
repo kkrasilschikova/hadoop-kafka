@@ -1,6 +1,6 @@
 # hadoop-kafka
 #### Purpose:
-1) Read events from topic and return only of specified type  
+1) Read events from topic and return only of AvailableForProcessing type
 2) Download URI (using cURL), apply specified function, return what function returns and clean downloaded files
 
 #### Prerequisites:

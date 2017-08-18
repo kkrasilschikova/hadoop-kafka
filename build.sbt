@@ -4,12 +4,15 @@ assemblySettings
 
 mainClass in assembly :=Some("kafka.Main")
 
+jarName in assembly := "hadoop-kafka.jar"
+
 name := "hadoop-kafka"
 
 version := "1.0"
 
 scalaVersion := "2.12.3"
 
+libraryDependencies += "org.apache.kafka" % "kafka-clients" % "0.11.0.0"
 libraryDependencies += "com.github.scopt" %% "scopt" % "3.6.0"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.0"

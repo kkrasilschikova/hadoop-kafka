@@ -5,10 +5,10 @@
 
 #### Prerequisites:
 You may provide your own function in Main method instead of a default someFunc(f: File).  
-You may change what type to return in getKafkaEvents in Consumer.
+You may change what type to return in getKafkaEvents in Consumer, all available types you may find in EventTypes, please choose corresponding JSON Reads from VeeamReads.
 
 #### In order to run the program
 
 - run *sbt assembly*
 - run jar with parameters (topic name to read from, kafka IP address), example:
-*java -jar hadoop-kafka-assembly-1.0.jar --topic TopicName --kafkaIpPort localhost:9092*
+*java -jar hadoop-kafka.jar --topic TopicName --kafkaIpPort localhost:9092*

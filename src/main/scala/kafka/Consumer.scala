@@ -4,8 +4,6 @@ import java.util
 import java.util.Properties
 
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
-import org.joda.time.DateTime
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 import scala.collection.JavaConverters._
@@ -24,31 +22,26 @@ class Consumer(bootstrapServers: String) {
   val consumer = new KafkaConsumer[String, JsValue](props)
 
   def getKafkaEvents(topic: String,
-                     ofType: AvailableForProcessing=AvailableForProcessing(uri=URI(""),
-                       handler_id=HandlerID(""),
-                       size=0,
-                       last_modified=new DateTime)): Seq[AvailableForProcessing] = {
-    
-    implicit val availableReads: Reads[AvailableForProcessing] = (
-      (__ \ "state").read[String] and
-        (__ \ "uri").read[String].map(URI) and
-        (__ \ "handler_id").read[String].map(_.toString.replace("\"", "")
-          .split("_") match
-        { case Array(a, b) => HandlerID(a, b.toInt)
-        }) and
-        (__ \ "size").read[Int] and
-        (__ \ "last_modified").read[DateTime](JodaReads.DefaultJodaDateTimeReads)
-      ) (AvailableForProcessing.apply _)
+                     ofType: Reads[AvailableForProcessing] = VeeamReads.availableForProcessingReads): Seq[AvailableForProcessing] = {
 
-    consumer.subscribe(util.Collections.singletonList(topic))
-    val records: ConsumerRecords[String, JsValue] = consumer.poll(1000)
+    if (consumer.listTopics().containsKey(topic)) {
 
-    val recordsOfType: Seq[JsValue] = (for (record <- records.asScala if (record.value \ "state").as[String] == ofType.state)
-      yield record.value()).toSeq
+      consumer.subscribe(util.Collections.singletonList(topic))
+      val records: ConsumerRecords[String, JsValue] = consumer.poll(1000)
 
-    val result: Seq[AvailableForProcessing] = recordsOfType
-      .map(elem => Json.fromJson[AvailableForProcessing](elem).get)
-    result
+      val jsonRecords: Seq[JsValue] = (for (record <- records.asScala) yield record.value()).toSeq
+
+      def getFinalSeq(seq: Seq[JsValue], acc: Seq[AvailableForProcessing]): Seq[AvailableForProcessing] = {
+        val result = for (rec <- seq) yield rec.validate[AvailableForProcessing](ofType) match {
+          case success: JsSuccess[AvailableForProcessing] => acc :+ success.get
+          case error: JsError => acc
+        }
+        result.flatten
+      }
+      getFinalSeq(jsonRecords, Seq.empty[AvailableForProcessing])
+    }
+
+    else Seq.empty[AvailableForProcessing]
   }
 
 }

@@ -14,7 +14,7 @@ class Processing {
     uri.uri.matches(pattern)
   }
 
-  def processWithFunc[A](uri: URI, func: File=> A, cleanup: Boolean=true): A = {
+  def processWithFunc[A](uri: URI, func: File=> A, cleanup: Boolean=false): A = {
     s"curl -O ${http.findFirstIn(uri.uri).get}".!!
     val file = new File(archive.findFirstIn(uri.uri).get)
     val result: A = func(file)

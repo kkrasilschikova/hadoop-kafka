@@ -2,6 +2,7 @@ package kafka
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import play.api.libs.json._
 
 trait VeeamLogBundleEvent {
   val state: String
@@ -11,10 +12,23 @@ trait VeeamLogBundleEvent {
   val last_modified: DateTime
 
   def formatTime: String = ISODateTimeFormat.dateTime.print(last_modified)
-
+  
   override def equals(obj: scala.Any): Boolean = {
     val that=obj.asInstanceOf[VeeamLogBundleEvent]
     (this.uri==that.uri) && (this.last_modified==that.last_modified) && (this.size==that.size)
+  }
+
+  object VeeamLogBundleEvent{
+    def apply(`class` : String, data: JsValue): VeeamLogBundleEvent = {
+      (`class` match{
+        case "AwaitingDownload" => Json.fromJson[AwaitingDownload](data)(VeeamReads.awaitingReads)
+        case "BeingDownloaded" => Json.fromJson[BeingDownloaded](data)(VeeamReads.downloadedReads)
+        case "NoLongerAvailable" => Json.fromJson[NoLongerAvailable](data)(VeeamReads.noavailableReads)
+        case "AvailableForProcessing" => Json.fromJson[AvailableForProcessing](data)(VeeamReads.availableReads)
+        case "QueuedForProcessing" => Json.fromJson[QueuedForProcessing](data)(VeeamReads.queuedReads)
+        case "ReadyForCleanup" => Json.fromJson[ReadyForCleanup](data)(VeeamReads.cleanupReads)
+      }).get
+    }
   }
 }
 

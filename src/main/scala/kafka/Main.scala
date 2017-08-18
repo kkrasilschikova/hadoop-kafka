@@ -16,12 +16,12 @@ object Main {
     parser.parse(args, Config()) match {
       case Some(config) =>
         val cons = new Consumer(config.kafkaIpPort)
-        val events: Seq[AvailableForProcessing] = cons.getKafkaEvents(config.topic)
-
+        val events= cons.getKafkaEvents(config.topic)
+println(s"\n\nevents", events)
         def someFunc(f: File) = f.getAbsolutePath // provide with any function
 
         val p = new Processing
-        for (event <- events if p.validated(event.uri)) p.processWithFunc(event.uri, someFunc)
+        //for (event <- events if p.validated(event.uri)) p.processWithFunc(event.uri, someFunc)
 
       case None => // arguments are bad, error message will be displayed
     }

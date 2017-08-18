@@ -2,6 +2,8 @@ package kafka
 
 import java.io.File
 
+import kafka.model.URI
+
 import scala.sys.process._
 import scala.util.matching.Regex
 

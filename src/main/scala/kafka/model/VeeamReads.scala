@@ -1,4 +1,4 @@
-package kafka
+package kafka.model
 
 import org.joda.time.DateTime
 import play.api.libs.functional.syntax._

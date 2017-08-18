@@ -3,6 +3,7 @@ package kafka
 import java.util
 import java.util.Properties
 
+import kafka.model.{AvailableForProcessing, VeeamReads}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
 import play.api.libs.json._
 

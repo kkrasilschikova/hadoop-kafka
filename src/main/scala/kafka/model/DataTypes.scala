@@ -1,4 +1,4 @@
-package kafka
+package kafka.model
 
 import java.lang.management.ManagementFactory
 

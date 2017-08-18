@@ -23,12 +23,18 @@ class Consumer(bootstrapServers: String) {
   props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
   val consumer = new KafkaConsumer[String, JsValue](props)
 
-  def getKafkaEvents(topic: String, ofType: AvailableForProcessing=AvailableForProcessing("AvailableForProcessing",URI(""),HandlerID(""),0,new DateTime)): Seq[AvailableForProcessing] = {
+  def getKafkaEvents(topic: String,
+                     ofType: AvailableForProcessing=AvailableForProcessing(uri=URI(""),
+                       handler_id=HandlerID(""),
+                       size=0,
+                       last_modified=new DateTime)): Seq[AvailableForProcessing] = {
+    
     implicit val availableReads: Reads[AvailableForProcessing] = (
       (__ \ "state").read[String] and
         (__ \ "uri").read[String].map(URI) and
         (__ \ "handler_id").read[String].map(_.toString.replace("\"", "")
-          .split("_") match { case Array(a, b) => HandlerID(a, b.toInt)
+          .split("_") match
+        { case Array(a, b) => HandlerID(a, b.toInt)
         }) and
         (__ \ "size").read[Int] and
         (__ \ "last_modified").read[DateTime](JodaReads.DefaultJodaDateTimeReads)
@@ -37,9 +43,11 @@ class Consumer(bootstrapServers: String) {
     consumer.subscribe(util.Collections.singletonList(topic))
     val records: ConsumerRecords[String, JsValue] = consumer.poll(1000)
 
-    val recordsOfType: Seq[JsValue] = (for (record <- records.asScala if (record.value \ "state").as[String] == ofType.state) yield record.value()).toSeq
+    val recordsOfType: Seq[JsValue] = (for (record <- records.asScala if (record.value \ "state").as[String] == ofType.state)
+      yield record.value()).toSeq
 
-    val result: Seq[AvailableForProcessing] = recordsOfType.map(elem => Json.fromJson[AvailableForProcessing](elem).get)
+    val result: Seq[AvailableForProcessing] = recordsOfType
+      .map(elem => Json.fromJson[AvailableForProcessing](elem).get)
     result
   }
 

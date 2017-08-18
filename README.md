@@ -10,5 +10,5 @@ You may change what type to return in getKafkaEvents in Consumer, all available 
 #### In order to run the program
 
 - run *sbt assembly*
-- run jar with parameters (topic name to read from, kafka IP address), example:
+- run jar with parameters (topic name to read from, kafka IP address), example:  
 *java -jar hadoop-kafka.jar --topic TopicName --kafkaIpPort localhost:9092*

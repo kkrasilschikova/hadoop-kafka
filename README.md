@@ -4,7 +4,7 @@
 2) Download URI (using cURL), apply specified function, return what function returns and clean downloaded files
 
 #### Prerequisites:
-You may provide your own function in Main method instead of a default someFunc(f: File).
+You may provide your own function in Main method instead of a default someFunc(f: File).  
 You may change what type to return in getKafkaEvents in Consumer.
 
 #### In order to run the program

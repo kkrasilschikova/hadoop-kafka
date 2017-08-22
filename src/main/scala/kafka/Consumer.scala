@@ -13,7 +13,7 @@ class Consumer(bootstrapServers: String) {
 
   val props = new Properties()
   props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
-  props.put(ConsumerConfig.GROUP_ID_CONFIG, "group")
+  props.put(ConsumerConfig.GROUP_ID_CONFIG, "MyGroup")
   props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true")
   props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000")
   props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000")
@@ -28,8 +28,7 @@ class Consumer(bootstrapServers: String) {
     if (consumer.listTopics().containsKey(topic)) {
 
       consumer.subscribe(util.Collections.singletonList(topic))
-      val records: ConsumerRecords[String, JsValue] = consumer.poll(1000)
-
+      val records: ConsumerRecords[String, JsValue] = consumer.poll(100)
       val jsonRecords: Seq[JsValue] = (for (record <- records.asScala) yield record.value()).toSeq
 
       def getFinalSeq(seq: Seq[JsValue], acc: Seq[AvailableForProcessing]): Seq[AvailableForProcessing] = {
@@ -39,10 +38,14 @@ class Consumer(bootstrapServers: String) {
         }
         result.flatten
       }
+      consumer.close()
       getFinalSeq(jsonRecords, Seq.empty[AvailableForProcessing])
     }
 
-    else Seq.empty[AvailableForProcessing]
+    else {
+      println(s"\nTopic $topic doesn't exist")
+      Seq.empty[AvailableForProcessing]
+    }
   }
 
 }

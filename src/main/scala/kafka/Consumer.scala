@@ -14,7 +14,7 @@ class Consumer(bootstrapServers: String) {
   val props = new Properties()
   props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
   props.put(ConsumerConfig.GROUP_ID_CONFIG, "MyGroup")
-  props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true")
+  props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
   props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000")
   props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
   props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, classOf[JsonDeserializer])

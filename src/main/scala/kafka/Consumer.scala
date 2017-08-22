@@ -32,7 +32,7 @@ class Consumer(bootstrapServers: String) {
 
       def getFinalSeq(seq: Seq[JsValue], acc: Seq[AvailableForProcessing]): Seq[AvailableForProcessing] = {
         val result = for (rec <- seq) yield rec.validate[AvailableForProcessing](ofType) match {
-          case success: JsSuccess[AvailableForProcessing] => println(success);acc :+ success.get
+          case success: JsSuccess[AvailableForProcessing] => acc :+ success.get
           case error: JsError => acc
         }
         result.flatten

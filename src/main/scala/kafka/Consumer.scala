@@ -28,7 +28,7 @@ class Consumer(bootstrapServers: String) {
     if (consumer.listTopics().containsKey(topic)) {
 
       consumer.subscribe(util.Collections.singletonList(topic))
-      val records: ConsumerRecords[String, JsValue] = consumer.poll(100)
+      val records: ConsumerRecords[String, JsValue] = consumer.poll(1000)
       val jsonRecords: Seq[JsValue] = (for (record <- records.asScala) yield record.value()).toSeq
 
       def getFinalSeq(seq: Seq[JsValue], acc: Seq[AvailableForProcessing]): Seq[AvailableForProcessing] = {

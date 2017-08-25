@@ -43,6 +43,7 @@ class Consumer(bootstrapServers: String) {
     }
 
     else {
+      consumer.close()
       println(s"\nTopic $topic doesn't exist")
       Seq.empty[AvailableForProcessing]
     }

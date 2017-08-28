@@ -4,11 +4,11 @@ import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 
 trait VeeamLogBundleEvent {
-  val state: String
-  val uri: URI
-  val handler_id: HandlerID
-  val size: Int
-  val last_modified: DateTime
+  def state: String
+  def uri: URI
+  def handler_id: HandlerID
+  def size: Int
+  def last_modified: DateTime
 
   def formatTime: String = ISODateTimeFormat.dateTime.print(last_modified)
 

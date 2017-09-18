@@ -25,7 +25,6 @@ class Consumer(bootstrapServers: String) {
                      ofType: Reads[AvailableForProcessing] = VeeamReads.availableForProcessingReads): Seq[AvailableForProcessing] = {
 
     if (consumer.listTopics().containsKey(topic)) {
-
       consumer.subscribe(util.Collections.singletonList(topic))
       val records: ConsumerRecords[String, JsValue] = consumer.poll(5000)
       val jsonRecords: Seq[JsValue] = (for (record <- records.asScala) yield record.value()).toSeq

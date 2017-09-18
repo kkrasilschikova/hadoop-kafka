@@ -71,4 +71,5 @@ object VeeamReads {
       (__ \ "size").read[Int] and
       (__ \ "last_modified").read[DateTime](JodaReads.DefaultJodaDateTimeReads)
     ) (ReadyForCleanup.apply _)
+
 }

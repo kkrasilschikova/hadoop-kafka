@@ -51,11 +51,11 @@ case class AvailableForProcessing(
                                    ) extends VeeamLogBundleEvent
 
 case class QueuedForProcessing(
-                                  state: String = "QueuedForProcessing",
-                                  uri: URI,
-                                  handler_id: HandlerID,
-                                  size: Int,
-                                  last_modified: DateTime
+                                state: String = "QueuedForProcessing",
+                                uri: URI,
+                                handler_id: HandlerID,
+                                size: Int,
+                                last_modified: DateTime
                                 ) extends VeeamLogBundleEvent
 
   case class ReadyForCleanup(

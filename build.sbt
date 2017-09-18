@@ -1,10 +1,8 @@
-import sbtassembly.Plugin.AssemblyKeys._
-
-assemblySettings
+import sbtassembly.MergeStrategy
 
 mainClass in assembly :=Some("kafka.Main")
 
-jarName in assembly := "hadoop-kafka.jar"
+assemblyJarName in assembly := "hadoop-kafka.jar"
 
 name := "hadoop-kafka"
 
@@ -24,7 +22,7 @@ val defaultMergeStrategy: String => MergeStrategy = {
   case PathList(ps @ _*) if Assembly.isReadme(ps.last) || Assembly.isLicenseFile(ps.last) =>
     MergeStrategy.rename
   case PathList("META-INF", xs @ _*) =>
-    xs map {_.toLowerCase} match {
+    (xs map {_.toLowerCase}) match {
       case ("manifest.mf" :: Nil) | ("index.list" :: Nil) | ("dependencies" :: Nil) =>
         MergeStrategy.discard
       case ps @ (x :: xs) if ps.last.endsWith(".sf") || ps.last.endsWith(".dsa") =>
@@ -40,15 +38,13 @@ val defaultMergeStrategy: String => MergeStrategy = {
   case _ => MergeStrategy.deduplicate
 }
 
-mergeStrategy in assembly := {
-  case PathList("javax", "xml", xs @ _*) => MergeStrategy.first
+assemblyMergeStrategy in assembly := {
+  case PathList("javax", "servlet", xs @ _*)         => MergeStrategy.first
   case PathList(ps @ _*) if ps.last endsWith ".html" => MergeStrategy.first
-  case "application.conf" => MergeStrategy.concat
-  case "unwanted.txt" => MergeStrategy.discard
-  case "plugin.properties" => MergeStrategy.last
-  case "log4j.properties" => MergeStrategy.last
+  case "application.conf"                            => MergeStrategy.concat
+  case "unwanted.txt"                                => MergeStrategy.discard
   case x =>
-    val oldStrategy = (mergeStrategy in assembly).value
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
 }
         

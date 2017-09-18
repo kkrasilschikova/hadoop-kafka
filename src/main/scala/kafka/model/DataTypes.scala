@@ -10,4 +10,5 @@ case class HandlerID (hostname: String = java.net.InetAddress.getLocalHost.getHo
                  pid: Int = ManagementFactory.getRuntimeMXBean.getName.split("@")(0).toInt) {
   override def toString: String = s"${hostname}_$pid"
 }
+
 case class URI (uri: String)

@@ -3,7 +3,6 @@ package kafka
 import java.util
 
 import org.apache.kafka.common.serialization.Deserializer
-
 import play.api.libs.json._
 
 class JsonDeserializer extends Deserializer[JsValue] {

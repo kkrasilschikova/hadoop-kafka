@@ -5,6 +5,7 @@ import java.io.File
 object Main {
   def main(args: Array[String]): Unit = {
     case class Config(topic: String = "", kafkaIpPort: String = "")
+
     val parser = new scopt.OptionParser[Config]("hadoop-kafka") {
       opt[String]("topic").required().valueName("<source-kafka-topic>").
         action((x, c) => c.copy(topic = x))

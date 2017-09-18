@@ -18,7 +18,7 @@ object Main {
         val cons = new Consumer(config.kafkaIpPort)
         val events = cons.getKafkaEvents(config.topic)
 
-        def someFunc(f: File) = f.getAbsolutePath // provide with any function
+        def someFunc(f: String) = f.isEmpty // provide with any function
 
         val p = new Processing
         if (events.nonEmpty) for (event <- events if p.validated(event.uri)) p.processWithFunc(event.uri, someFunc)

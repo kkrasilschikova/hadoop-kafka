@@ -16,13 +16,14 @@ class Processing {
     uri.uri.matches(pattern)
   }
 
-  def processWithFunc[A](uri: URI, func: File=> A, cleanup: Boolean=true): A = {
+  def processWithFunc[A](uri: URI, func: String => A, cleanup: Boolean=true): A = {
     val tempDir: String = System.getProperty("java.io.tmpdir")
     val fileName: String = archive.findFirstIn(uri.uri).get
     val linkToDownloadFrom: String = http.findFirstIn(uri.uri).get
     s"curl -o $tempDir\\$fileName $linkToDownloadFrom".!
     val file = new File(s"$tempDir\\$fileName")
-    val result: A = func(file)
+    val fileLocation: String = s"$tempDir\\$fileName"
+    val result: A = func(fileLocation)
     if (cleanup) {
       if (file.exists()) file.delete()
     }

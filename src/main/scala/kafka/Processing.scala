@@ -22,8 +22,7 @@ class Processing {
     val linkToDownloadFrom: String = http.findFirstIn(uri.uri).get
     s"curl -o $tempDir\\$fileName $linkToDownloadFrom".!
     val file = new File(s"$tempDir\\$fileName")
-    val fileLocation: String = s"$tempDir\\$fileName"
-    val result: A = func(fileLocation)
+    val result: A = func(fileName)
     if (cleanup) {
       if (file.exists()) file.delete()
     }

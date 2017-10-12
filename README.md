@@ -5,7 +5,7 @@
 
 #### Prerequisites:
 You may provide your own function in Main method instead of a default someFunc(f: File).  
-You may change what type to return in getKafkaEvents in Consumer, all available types you may find in EventTypes, please choose corresponding JSON Reads from VeeamReads.
+You may change what type to return in getKafkaEvents in Consumer, all available types you may find in EventTypes.
 
 #### In order to run the program
 

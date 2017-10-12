@@ -12,7 +12,7 @@ trait VeeamReader[A] {
 object VeeamReaderInstances {
   var badBundlesCounter = 0
 
-  implicit val jsValueReader: VeeamReader[JsValue] = new VeeamReader[JsValue] {
+  implicit val jsValueReader = new VeeamReader[JsValue] {
     def read(value: JsValue): VeeamLogBundleEvent = {
       val state = (value \ "state").as[String]
       val uri = (value \ "uri").as[String] match {

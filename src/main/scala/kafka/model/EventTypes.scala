@@ -43,12 +43,12 @@ case class NoLongerAvailable(
                               ) extends VeeamLogBundleEvent
 
 case class AvailableForProcessing(
-                                     state: String = "AvailableForProcessing",
-                                     uri: URI,
-                                     handler_id: HandlerID,
-                                     size: Int,
-                                     last_modified: DateTime
-                                   ) extends VeeamLogBundleEvent
+                                   state: String = "AvailableForProcessing",
+                                   uri: URI,
+                                   handler_id: HandlerID,
+                                   size: Int,
+                                   last_modified: DateTime
+                                 ) extends VeeamLogBundleEvent
 
 case class QueuedForProcessing(
                                 state: String = "QueuedForProcessing",

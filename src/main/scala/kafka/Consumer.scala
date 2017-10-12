@@ -3,10 +3,14 @@ package kafka
 import java.util
 import java.util.Properties
 
-import kafka.model.{AvailableForProcessing, VeeamReads}
+import kafka.model.VeeamReaderInstances._
+import kafka.model.VeeamSyntax._
+
+import kafka.model.{AvailableForProcessing, VeeamLogBundleEvent}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecords, KafkaConsumer}
 import play.api.libs.json._
 
+import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 
 class Consumer(bootstrapServers: String) {
@@ -21,24 +25,37 @@ class Consumer(bootstrapServers: String) {
   props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
   val consumer = new KafkaConsumer[String, JsValue](props)
 
-  def getKafkaEvents(topic: String,
-                     ofType: Reads[AvailableForProcessing] = VeeamReads.availableForProcessingReads): Seq[AvailableForProcessing] = {
+  def getKafkaEvents(topic: String): Seq[AvailableForProcessing] = {
 
     if (consumer.listTopics().containsKey(topic)) {
+
       consumer.subscribe(util.Collections.singletonList(topic))
       val records: ConsumerRecords[String, JsValue] = consumer.poll(5000)
       val jsonRecords: Seq[JsValue] = (for (record <- records.asScala) yield record.value()).toSeq
 
-      def getFinalSeq(seq: Seq[JsValue], acc: Seq[AvailableForProcessing]): Seq[AvailableForProcessing] = {
-        val result = for (rec <- seq) yield rec.validate[AvailableForProcessing](ofType) match {
-          case success: JsSuccess[AvailableForProcessing] => acc :+ success.get
-          case error: JsError => acc
+      //every record we cast to VeeamLogBundleEvent
+      // and then add to final sequence only of needed type (AvailableForProcessing, for example)
+      def getFinalSeq(seq: Seq[JsValue]): Seq[AvailableForProcessing] = {
+        val result = for (rec <- seq) yield rec.toVeeamLogBundleEvent
+        println(s"Total number of Malformed Bundles: $badBundlesCounter") //counted in VeeamReader
+        badBundlesCounter = 0
+
+        @tailrec
+        def loop(source: Seq[VeeamLogBundleEvent], acc: Seq[AvailableForProcessing]): Seq[AvailableForProcessing] = {
+          source match {
+            case Nil => acc
+            case head :: tail => head match {
+              case elem: AvailableForProcessing => loop(tail, acc :+ elem)
+              case _ => loop(tail, acc)
+            }
+          }
         }
-        result.flatten
+
+        loop(result, Seq.empty)
       }
 
       consumer.close()
-      getFinalSeq(jsonRecords, Seq.empty[AvailableForProcessing])
+      getFinalSeq(jsonRecords)
     }
 
     else {

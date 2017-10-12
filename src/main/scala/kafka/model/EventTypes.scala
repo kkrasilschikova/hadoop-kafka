@@ -65,3 +65,11 @@ case class QueuedForProcessing(
                               size: Int,
                               last_modified: DateTime
                             ) extends VeeamLogBundleEvent
+
+case class MalformedBundle(
+                            state: String = "MalformedBundle",
+                            uri: URI = URI(""),
+                            handler_id: HandlerID = HandlerID(),
+                            size: Int = 0,
+                            last_modified: DateTime = new DateTime
+                          ) extends VeeamLogBundleEvent
